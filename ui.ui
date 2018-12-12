@@ -353,6 +353,12 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="2" column="3">
            <widget class="QPushButton" name="gun_left">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -363,7 +369,11 @@
              <string notr="true">background: rgb(255, 255, 127)</string>
             </property>
             <property name="text">
-             <string>🡐</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_left.png</normaloff>images/arrow_left.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -378,6 +388,12 @@
           </item>
           <item row="2" column="5">
            <widget class="QPushButton" name="gun_right">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -388,7 +404,11 @@
              <string notr="true">background: rgb(255, 255, 127)</string>
             </property>
             <property name="text">
-             <string>🡒</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_right.png</normaloff>images/arrow_right.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -403,6 +423,12 @@
           </item>
           <item row="0" column="3">
            <widget class="QPushButton" name="tank_left">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -410,7 +436,11 @@
              </font>
             </property>
             <property name="text">
-             <string>🡐</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_left.png</normaloff>images/arrow_left.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -425,6 +455,12 @@
           </item>
           <item row="0" column="5">
            <widget class="QPushButton" name="tank_right">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -432,7 +468,11 @@
              </font>
             </property>
             <property name="text">
-             <string>🡒</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_right.png</normaloff>images/arrow_right.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -447,6 +487,12 @@
           </item>
           <item row="2" column="2">
            <widget class="QPushButton" name="gun_fire">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -463,6 +509,12 @@
           </item>
           <item row="0" column="0">
            <widget class="QPushButton" name="tank_forward">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -470,7 +522,11 @@
              </font>
             </property>
             <property name="text">
-             <string>🡑 </string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_up.png</normaloff>images/arrow_up.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -485,6 +541,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="tank_back">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -492,7 +554,11 @@
              </font>
             </property>
             <property name="text">
-             <string>🡓 </string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_down.png</normaloff>images/arrow_down.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -507,6 +573,12 @@
           </item>
           <item row="2" column="1">
            <widget class="QPushButton" name="gun_down">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -517,7 +589,11 @@
              <string notr="true">background: rgb(255, 255, 127)</string>
             </property>
             <property name="text">
-             <string>🡓 </string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_down.png</normaloff>images/arrow_down.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -532,6 +608,12 @@
           </item>
           <item row="2" column="0">
            <widget class="QPushButton" name="gun_up">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -542,7 +624,11 @@
              <string notr="true">background: rgb(255, 255, 127)</string>
             </property>
             <property name="text">
-             <string>🡑 </string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>images/arrow_up.png</normaloff>images/arrow_up.png</iconset>
             </property>
             <property name="autoRepeat">
              <bool>true</bool>
@@ -557,6 +643,12 @@
           </item>
           <item row="3" column="2">
            <widget class="QPushButton" name="pushButton_11">
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -575,6 +667,12 @@
            <widget class="QPushButton" name="tank_stop">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>107</width>
+              <height>38</height>
+             </size>
             </property>
             <property name="font">
              <font>
@@ -1195,7 +1293,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1024</width>
+     <width>1025</width>
      <height>21</height>
     </rect>
    </property>
