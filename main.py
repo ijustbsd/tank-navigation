@@ -36,6 +36,10 @@ class Vehicle:
         self.gun_max_angle = 27
         self.gun_min_angle = -15
 
+        # Расход топлива
+        self.km_left = 160
+        self.fuel_cons = 345
+
         # Внутренние параметры
         self.x = 0
         self.y = 0
@@ -52,6 +56,11 @@ class Vehicle:
 
     def _timer_tick(self):
         d_km = self.speed / (3600 * self._update_frequency)
+        self.km_left -= self.fuel_cons / 100 * d_km
+        if self.km_left <= 0:
+            self.km_left = 0
+            self.speed = 0
+            d_km = 0
         self.distance += abs(d_km)
         d_km *= 1000  # переводим в метры
         self.x += d_km * math.cos(self.direction)
@@ -99,6 +108,7 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.coord_label.setText('{:.2f}, {:.2f}'.format(self.vehicle.x, self.vehicle.y))
         self.turn_label.setText('{:.2f}'.format(self.vehicle_direction))
         self.gun_turn_label.setText('{:.2f}'.format(self.gun_direction))
+        self.km_left_label.setText('{:.2f}'.format(self.vehicle.km_left))
 
         self.navigation.dangers = []
         for x, y in dangers:
@@ -136,6 +146,8 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.vehicle.speed = 0
 
     def tank_left_click(self):  # 60 в секунду
+        if not self.vehicle.km_left:
+            return
         if not (self.vehicle.speed or self.vehicle.has_tracks):
             return
         self.vehicle_direction = (self.vehicle_direction - self.vehicle.turn_speed / 60) % 360
@@ -144,6 +156,8 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.navigation.rotate_compass(self.vehicle.turn_speed / 60)
 
     def tank_right_click(self):  # 60 в секунду
+        if not self.vehicle.km_left:
+            return
         if not (self.vehicle.speed or self.vehicle.has_tracks):
             return
         self.vehicle_direction = (self.vehicle_direction + self.vehicle.turn_speed / 60) % 360
