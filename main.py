@@ -139,7 +139,7 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         if not (self.vehicle.speed or self.vehicle.has_tracks):
             return
         self.vehicle_direction = (self.vehicle_direction - self.vehicle.turn_speed / 60) % 360
-        self.gun_direction = (self.gun_direction - self.vehicle.turn_speed / 60) % 360
+        # self.gun_direction = (self.gun_direction - self.vehicle.turn_speed / 60) % 360
         self.vehicle.direction += math.radians(self.vehicle.turn_speed / 60)
         self.navigation.rotate_compass(self.vehicle.turn_speed / 60)
 
@@ -147,7 +147,7 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         if not (self.vehicle.speed or self.vehicle.has_tracks):
             return
         self.vehicle_direction = (self.vehicle_direction + self.vehicle.turn_speed / 60) % 360
-        self.gun_direction = (self.gun_direction + self.vehicle.turn_speed / 60) % 360
+        # self.gun_direction = (self.gun_direction + self.vehicle.turn_speed / 60) % 360
         self.vehicle.direction += math.radians(-self.vehicle.turn_speed / 60)
         self.navigation.rotate_compass(-self.vehicle.turn_speed / 60)
 
