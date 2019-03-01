@@ -2,19 +2,22 @@
 
 import math
 import sys
+from threading import Thread
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import navigation
-import ui
+import ui.main_form
+import ui.navigation
+from remote_control.control import Control
 
+dangers = ()
 
-dangers = (
-    (20, 20),
-    (-10, -50),
-    (40, 5),
-    (-45, 150)
-)
+# dangers = (
+#     (20, 20),
+#     (-10, -50),
+#     (40, 5),
+#     (-45, 150)
+# )
 
 # import random
 # dangers = [(random.randint(-50, 50), random.randint(-50, 50)) for x in range(250)]
@@ -35,6 +38,9 @@ class Vehicle:
         self.gun_vertical_speed = 7  # в секунду
         self.gun_max_angle = 27
         self.gun_min_angle = -15
+
+        # Параметры защиты
+        self.protect = 12
 
         # Расход топлива
         self.km_left = 160
@@ -67,12 +73,12 @@ class Vehicle:
         self.y += d_km * math.sin(self.direction)
 
 
-class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
+class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        self.navigation = navigation.NavigationUI(self.groupBox_8)
+        self.navigation = ui.navigation.NavigationUI(self.groupBox_8)
         self.verticalLayout_5.insertWidget(1, self.navigation)
 
         self.tank_forward.clicked.connect(self.tank_forward_click)
@@ -85,6 +91,7 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.gun_up.clicked.connect(self.gun_up_click)
         self.gun_down.clicked.connect(self.gun_down_click)
         self.gun_fire.clicked.connect(self.gun_fire_click)
+        self.tank_protect.clicked.connect(self.protect_click)
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timer_tick)
@@ -94,13 +101,25 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.fps_timer.timeout.connect(self.show_fps)
         self.fps_timer.start(1000)
 
+        self.data_send_timer = QtCore.QTimer()
+        self.data_send_timer.timeout.connect(self.data_send_timer_tick)
+
         self.vehicle = Vehicle()
         self.ammo_label.setText(str(self.vehicle.ammo))
+        self.protect_label.setText(str(self.vehicle.protect))
 
         self.vehicle_direction = 0
         self.gun_direction = 0
 
         self.fps = 0
+
+        control = Control('192.168.1.62', 1488, self, self.vehicle)
+        control_listener = Thread(target=control.events_listener)
+        control_listener.daemon = True
+        control_listener.start()
+        control_sender = Thread(target=control.events_sender)
+        control_sender.daemon = True
+        control_sender.start()
 
     def timer_tick(self):
         self.speed_label.setText('{:.2f}'.format(abs(self.vehicle.speed)))
@@ -127,6 +146,9 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
                 self.navigation.dangers.append(result)
         self.navigation.update()
         self.fps += 1
+
+    def data_send_timer_tick(self):
+        self.control.events_sender()
 
     def show_fps(self):
         self.setWindowTitle(f'Main UI Example [{self.fps} FPS]')
@@ -189,6 +211,11 @@ class MainUI(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         if self.vehicle.ammo:
             self.vehicle.ammo -= 1
             self.ammo_label.setText(str(self.vehicle.ammo))
+
+    def protect_click(self):
+        if self.vehicle.protect:
+            self.vehicle.protect -= 1
+            self.protect_label.setText(str(self.vehicle.protect))
 
 
 def run():
