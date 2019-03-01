@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import socket
+import time
 
 from . import protocol_pb2
 
@@ -25,7 +26,6 @@ class Control:
         self.is_connected = True
 
     def _disconnect(self):
-        self.ui.data_send_timer.stop()
         self.is_connected = False
 
     def events_listener(self):
@@ -60,3 +60,4 @@ class Control:
                     self.sender_sock.sendall(data.SerializeToString())
                 except BrokenPipeError:
                     pass
+            time.sleep(1 / 60)

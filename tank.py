@@ -2,6 +2,7 @@
 
 import math
 import sys
+import time
 from threading import Thread
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -36,7 +37,7 @@ class Vehicle:
         self.ammo = 10
         self.gun_turn_speed = 30  # в секунду
         self.gun_vertical_speed = 7  # в секунду
-        self.gun_max_angle = 27
+        self.gun_max_angle = 20
         self.gun_min_angle = -15
 
         # Параметры защиты
@@ -72,7 +73,6 @@ class Vehicle:
         self.x += d_km * math.cos(self.direction)
         self.y += d_km * math.sin(self.direction)
 
-
 class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -80,6 +80,7 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
 
         self.navigation = ui.navigation.NavigationUI(self.groupBox_8)
         self.verticalLayout_5.insertWidget(1, self.navigation)
+        self.is_nav_need_update = True
 
         self.tank_forward.clicked.connect(self.tank_forward_click)
         self.tank_back.clicked.connect(self.tank_back_click)
@@ -101,15 +102,15 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         self.fps_timer.timeout.connect(self.show_fps)
         self.fps_timer.start(1000)
 
-        self.data_send_timer = QtCore.QTimer()
-        self.data_send_timer.timeout.connect(self.data_send_timer_tick)
-
         self.vehicle = Vehicle()
         self.ammo_label.setText(str(self.vehicle.ammo))
         self.protect_label.setText(str(self.vehicle.protect))
 
         self.vehicle_direction = 0
         self.gun_direction = 0
+
+        self.cache = {}
+        self._update_cache()
 
         self.fps = 0
 
@@ -121,13 +122,33 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         control_sender.daemon = True
         control_sender.start()
 
+    def _update_cache(self):
+        self.cache = {
+            'speed': self.vehicle.speed,
+            'distance': self.vehicle.distance,
+            'x': self.vehicle.x,
+            'y': self.vehicle.y,
+            'vehicle_direct': self.vehicle_direction,
+            'gun_direct': self.gun_direction,
+            'km_left': self.vehicle.km_left
+        }
+
+
     def timer_tick(self):
-        self.speed_label.setText('{:.2f}'.format(abs(self.vehicle.speed)))
-        self.distance_label.setText('{:.3f}'.format(self.vehicle.distance)[:-1])
-        self.coord_label.setText('{:.2f}, {:.2f}'.format(self.vehicle.x, self.vehicle.y))
-        self.turn_label.setText('{:.2f}'.format(self.vehicle_direction))
-        self.gun_turn_label.setText('{:.2f}'.format(self.gun_direction))
-        self.km_left_label.setText('{:.2f}'.format(self.vehicle.km_left))
+        if self.cache['speed'] != self.vehicle.speed:
+            self.speed_label.setText('{:.2f}'.format(abs(self.vehicle.speed)))
+        if self.cache['distance'] != self.vehicle.distance:
+            self.distance_label.setText('{:.3f}'.format(self.vehicle.distance)[:-1])
+        if self.cache['x'] != self.vehicle.x or self.cache['y'] != self.vehicle.y:
+            self.coord_label.setText('{:.2f}, {:.2f}'.format(self.vehicle.x, self.vehicle.y))
+        if self.cache['vehicle_direct'] != self.vehicle_direction:
+            self.turn_label.setText('{:.2f}'.format(self.vehicle_direction))
+        if self.cache['gun_direct'] != self.gun_direction:
+            self.gun_turn_label.setText('{:.2f}'.format(self.gun_direction))
+        if self.cache['km_left'] != self.vehicle.km_left:
+            self.km_left_label.setText('{:.2f}'.format(self.vehicle.km_left))
+
+        self._update_cache()
 
         self.navigation.dangers = []
         for x, y in dangers:
@@ -144,11 +165,10 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
                     (False, False): 90 + a,
                 }[d_x > 0, d_y < 0]
                 self.navigation.dangers.append(result)
-        self.navigation.update()
+        if self.is_nav_need_update:
+            self.navigation.update()
+            self.is_nav_need_update = False
         self.fps += 1
-
-    def data_send_timer_tick(self):
-        self.control.events_sender()
 
     def show_fps(self):
         self.setWindowTitle(f'Main UI Example [{self.fps} FPS]')
@@ -176,6 +196,7 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         # self.gun_direction = (self.gun_direction - self.vehicle.turn_speed / 60) % 360
         self.vehicle.direction += math.radians(self.vehicle.turn_speed / 60)
         self.navigation.rotate_compass(self.vehicle.turn_speed / 60)
+        self.is_nav_need_update = True
 
     def tank_right_click(self):  # 60 в секунду
         if not self.vehicle.km_left:
@@ -186,14 +207,17 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         # self.gun_direction = (self.gun_direction + self.vehicle.turn_speed / 60) % 360
         self.vehicle.direction += math.radians(-self.vehicle.turn_speed / 60)
         self.navigation.rotate_compass(-self.vehicle.turn_speed / 60)
+        self.is_nav_need_update = True
 
     def gun_left_click(self):
         self.gun_direction = (self.gun_direction - self.vehicle.gun_turn_speed / 60) % 360
         self.navigation.rotate_tank_gun(-self.vehicle.gun_turn_speed / 60)
+        self.is_nav_need_update = True
 
     def gun_right_click(self):
         self.gun_direction = (self.gun_direction + self.vehicle.gun_turn_speed / 60) % 360
         self.navigation.rotate_tank_gun(self.vehicle.gun_turn_speed / 60)
+        self.is_nav_need_update = True
 
     def gun_up_click(self):
         self.vehicle.gun_angle += self.vehicle.gun_vertical_speed / 60
