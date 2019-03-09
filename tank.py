@@ -84,6 +84,10 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         self.verticalLayout_5.insertWidget(1, self.navigation)
         self.is_nav_need_update = True
 
+        v = QtGui.QDoubleValidator()
+        self.x_input.setValidator(v)
+        self.y_input.setValidator(v)
+
         self.tank_forward.clicked.connect(self.tank_forward_click)
         self.tank_back.clicked.connect(self.tank_back_click)
         self.tank_left.clicked.connect(self.tank_left_click)
@@ -95,6 +99,7 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
         self.gun_down.clicked.connect(self.gun_down_click)
         self.gun_fire.clicked.connect(self.gun_fire_click)
         self.tank_protect.clicked.connect(self.protect_click)
+        self.vehicle_tp.clicked.connect(self.vehicle_tp_click)
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timer_tick)
@@ -253,6 +258,12 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
             self.vehicle.protect -= 1
             self.protect_label.setText(str(self.vehicle.protect))
 
+    def vehicle_tp_click(self):
+        try:
+            self.vehicle.x = float(self.x_input.text())
+            self.vehicle.y = float(self.y_input.text())
+        except ValueError:
+            pass
 
 def run():
     app = QtWidgets.QApplication(sys.argv)
