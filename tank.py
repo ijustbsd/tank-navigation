@@ -5,7 +5,7 @@ import sys
 import time
 from threading import Thread
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtTest, QtWidgets
 
 import ui.main_form
 import ui.navigation
@@ -28,8 +28,10 @@ class Vehicle:
     def __init__(self):
         # Параметры движения
         self.max_speed = 42
-        self.acceleration = 0.6
-        self.back_acceleration = 1.8
+        self.back_max_speed = -21
+        self.acceleration = 1.2
+        self.back_acceleration = -0.6
+        self.stop_acceleration = -5.5
         self.turn_speed = 15
         self.has_tracks = True
 
@@ -114,7 +116,7 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
 
         self.fps = 0
 
-        control = Control('192.168.1.62', 1488, self, self.vehicle)
+        control = Control(self, self.vehicle)
         control_listener = Thread(target=control.events_listener)
         control_listener.daemon = True
         control_listener.start()
@@ -132,7 +134,6 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
             'gun_direct': self.gun_direction,
             'km_left': self.vehicle.km_left
         }
-
 
     def timer_tick(self):
         if self.cache['speed'] != self.vehicle.speed:
@@ -180,12 +181,23 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
             self.vehicle.speed = self.vehicle.max_speed
 
     def tank_back_click(self):
-        self.vehicle.speed -= self.vehicle.back_acceleration
-        if self.vehicle.speed < 0:
-            self.vehicle.speed = 0
+        self.vehicle.speed += self.vehicle.back_acceleration
+        if self.vehicle.speed < self.vehicle.back_max_speed:
+            self.vehicle.speed = self.vehicle.back_max_speed
 
     def tank_stop_click(self):
-        self.vehicle.speed = 0
+        if self.vehicle.speed > 0:
+            while self.vehicle.speed:
+                self.vehicle.speed += self.vehicle.stop_acceleration
+                if self.vehicle.speed < 0:
+                    self.vehicle.speed = 0
+                QtTest.QTest.qWait(100)
+        if self.vehicle.speed < 0:
+            while self.vehicle.speed:
+                self.vehicle.speed -= self.vehicle.stop_acceleration
+                if self.vehicle.speed > 0:
+                    self.vehicle.speed = 0
+                QtTest.QTest.qWait(100)
 
     def tank_left_click(self):  # 60 в секунду
         if not self.vehicle.km_left:

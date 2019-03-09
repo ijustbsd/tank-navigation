@@ -9,15 +9,12 @@ message Action {
 message Data {
     float speed = 1;
     float distance = 2;
-    int32 ammo = 3;
-    float gun_angle = 4;
-    int32 protect = 5;
-    float machine_turn = 6;
-    float gun_turn = 7;
-
-    message coords {
-        float x = 1;
-        float y = 2;
-    }
-
+    float km_left = 3;
+    int32 ammo = 4;
+    float gun_angle = 5;
+    int32 protect = 6;
+    float machine_turn = 7;
+    float gun_turn = 8;
+    float x = 9;
+    float y = 10;
 }

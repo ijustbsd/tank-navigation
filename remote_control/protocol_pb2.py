@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='protocol',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0eprotocol.proto\x12\x08protocol\"\x18\n\x06\x41\x63tion\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\"\xa1\x01\n\x04\x44\x61ta\x12\r\n\x05speed\x18\x01 \x01(\x02\x12\x10\n\x08\x64istance\x18\x02 \x01(\x02\x12\x0c\n\x04\x61mmo\x18\x03 \x01(\x05\x12\x11\n\tgun_angle\x18\x04 \x01(\x02\x12\x0f\n\x07protect\x18\x05 \x01(\x05\x12\x14\n\x0cmachine_turn\x18\x06 \x01(\x02\x12\x10\n\x08gun_turn\x18\x07 \x01(\x02\x1a\x1e\n\x06\x63oords\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x62\x06proto3')
+  serialized_pb=_b('\n\x0eprotocol.proto\x12\x08protocol\"\x18\n\x06\x41\x63tion\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\"\xa8\x01\n\x04\x44\x61ta\x12\r\n\x05speed\x18\x01 \x01(\x02\x12\x10\n\x08\x64istance\x18\x02 \x01(\x02\x12\x0f\n\x07km_left\x18\x03 \x01(\x02\x12\x0c\n\x04\x61mmo\x18\x04 \x01(\x05\x12\x11\n\tgun_angle\x18\x05 \x01(\x02\x12\x0f\n\x07protect\x18\x06 \x01(\x05\x12\x14\n\x0cmachine_turn\x18\x07 \x01(\x02\x12\x10\n\x08gun_turn\x18\x08 \x01(\x02\x12\t\n\x01x\x18\t \x01(\x02\x12\t\n\x01y\x18\n \x01(\x02\x62\x06proto3')
 )
 
 
@@ -56,43 +56,6 @@ _ACTION = _descriptor.Descriptor(
 )
 
 
-_DATA_COORDS = _descriptor.Descriptor(
-  name='coords',
-  full_name='protocol.Data.coords',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='x', full_name='protocol.Data.coords.x', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='y', full_name='protocol.Data.coords.y', index=1,
-      number=2, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=186,
-  serialized_end=216,
-)
-
 _DATA = _descriptor.Descriptor(
   name='Data',
   full_name='protocol.Data',
@@ -115,36 +78,57 @@ _DATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ammo', full_name='protocol.Data.ammo', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='gun_angle', full_name='protocol.Data.gun_angle', index=3,
-      number=4, type=2, cpp_type=6, label=1,
+      name='km_left', full_name='protocol.Data.km_left', index=2,
+      number=3, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='protect', full_name='protocol.Data.protect', index=4,
-      number=5, type=5, cpp_type=1, label=1,
+      name='ammo', full_name='protocol.Data.ammo', index=3,
+      number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='machine_turn', full_name='protocol.Data.machine_turn', index=5,
-      number=6, type=2, cpp_type=6, label=1,
+      name='gun_angle', full_name='protocol.Data.gun_angle', index=4,
+      number=5, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gun_turn', full_name='protocol.Data.gun_turn', index=6,
+      name='protect', full_name='protocol.Data.protect', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='machine_turn', full_name='protocol.Data.machine_turn', index=6,
       number=7, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='gun_turn', full_name='protocol.Data.gun_turn', index=7,
+      number=8, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='x', full_name='protocol.Data.x', index=8,
+      number=9, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='protocol.Data.y', index=9,
+      number=10, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -152,7 +136,7 @@ _DATA = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_DATA_COORDS, ],
+  nested_types=[],
   enum_types=[
   ],
   serialized_options=None,
@@ -162,10 +146,9 @@ _DATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=55,
-  serialized_end=216,
+  serialized_end=223,
 )
 
-_DATA_COORDS.containing_type = _DATA
 DESCRIPTOR.message_types_by_name['Action'] = _ACTION
 DESCRIPTOR.message_types_by_name['Data'] = _DATA
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -178,19 +161,11 @@ Action = _reflection.GeneratedProtocolMessageType('Action', (_message.Message,),
 _sym_db.RegisterMessage(Action)
 
 Data = _reflection.GeneratedProtocolMessageType('Data', (_message.Message,), dict(
-
-  coords = _reflection.GeneratedProtocolMessageType('coords', (_message.Message,), dict(
-    DESCRIPTOR = _DATA_COORDS,
-    __module__ = 'protocol_pb2'
-    # @@protoc_insertion_point(class_scope:protocol.Data.coords)
-    ))
-  ,
   DESCRIPTOR = _DATA,
   __module__ = 'protocol_pb2'
   # @@protoc_insertion_point(class_scope:protocol.Data)
   ))
 _sym_db.RegisterMessage(Data)
-_sym_db.RegisterMessage(Data.coords)
 
 
 # @@protoc_insertion_point(module_scope)
