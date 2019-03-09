@@ -65,7 +65,7 @@ class Vehicle:
 
     def _timer_tick(self):
         d_km = self.speed / (3600 * self._update_frequency)
-        self.km_left -= self.fuel_cons / 100 * d_km
+        self.km_left -= self.fuel_cons / 100 * abs(d_km)
         if self.km_left <= 0:
             self.km_left = 0
             self.speed = 0
