@@ -5,6 +5,7 @@ import time
 
 from . import protocol_pb2
 
+
 class Control:
     def __init__(self, ui, vehicle):
         self.ui = ui
@@ -17,8 +18,7 @@ class Control:
         try:
             self.sender_sock.connect((host, 1488))
         except ConnectionRefusedError:
-            self.events_listener()
-            return
+            pass
         self.is_connected = True
         print(f'{host} connected!')
 
@@ -30,7 +30,6 @@ class Control:
         return sock
 
     def _disconnect(self):
-        print(456)
         self.is_connected = False
 
     def _event_parser(self, data):
