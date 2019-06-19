@@ -13,24 +13,15 @@ class Control:
 
         self.is_connected = False
 
-    def _connect(self, host):
-        self.sender_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self.sender_sock.connect((host, 1488))
-        except ConnectionRefusedError:
-            pass
-        self.is_connected = True
-        print(f'{host} connected!')
+        self.sender_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sender_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
     def _create_listener_socket(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind(('0.0.0.0', 1488))
+        sock.bind(('0.0.0.0', 1400))
         sock.listen(1)
         return sock
-
-    def _disconnect(self):
-        self.is_connected = False
 
     def _event_parser(self, data):
         act = protocol_pb2.Action()
@@ -46,11 +37,8 @@ class Control:
         conn, addr = sock.accept()
         while True:
             data = conn.recv(1024)
-            if not self.is_connected:
-                self._connect(addr[0])
-            if not data and self.is_connected:
+            if not data:
                 print(f'{addr[0]} disconnected!')
-                self._disconnect()
                 sock.close()
                 sock = self._create_listener_socket()
                 print('Listening...')
@@ -59,21 +47,19 @@ class Control:
             self._event_parser(data)
 
     def events_sender(self):
+        print(f'ID: {self.vehicle.id_}. Sending...')
         while True:
-            if self.is_connected:
-                data = protocol_pb2.Data()
-                data.speed = self.vehicle.speed
-                data.distance = self.vehicle.distance
-                data.km_left = self.vehicle.km_left
-                data.ammo = self.vehicle.ammo
-                data.gun_angle = self.vehicle.gun_angle
-                data.protect = self.vehicle.protect
-                data.machine_turn = self.ui.vehicle_direction
-                data.gun_turn = self.ui.gun_direction
-                data.x = self.vehicle.x
-                data.y = self.vehicle.y
-                try:
-                    self.sender_sock.sendall(data.SerializeToString())
-                except BrokenPipeError:
-                    pass
+            data = protocol_pb2.Data()
+            data.id = str(self.vehicle.id_)
+            data.speed = self.vehicle.speed
+            data.distance = self.vehicle.distance
+            data.km_left = self.vehicle.km_left
+            data.ammo = self.vehicle.ammo
+            data.gun_angle = self.vehicle.gun_angle
+            data.protect = self.vehicle.protect
+            data.machine_turn = self.ui.vehicle_direction
+            data.gun_turn = self.ui.gun_direction
+            data.x = self.vehicle.x
+            data.y = self.vehicle.y
+            self.sender_sock.sendto(data.SerializeToString(), ('255.255.255.255', 4242))
             time.sleep(1 / 60)

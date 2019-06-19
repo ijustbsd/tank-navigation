@@ -2,7 +2,6 @@
 
 import math
 import sys
-import time
 from threading import Thread
 
 from PyQt5 import QtCore, QtGui, QtTest, QtWidgets
@@ -26,6 +25,8 @@ dangers = ()
 
 class Vehicle:
     def __init__(self):
+        self.id_ = '1'
+
         # Параметры движения
         self.max_speed = 42
         self.back_max_speed = -21
@@ -74,6 +75,7 @@ class Vehicle:
         d_km *= 1000  # переводим в метры
         self.x += d_km * math.cos(self.direction)
         self.y += d_km * math.sin(self.direction)
+
 
 class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
     def __init__(self):
@@ -264,6 +266,7 @@ class MainUI(QtWidgets.QMainWindow, ui.main_form.Ui_MainWindow):
             self.vehicle.y = float(self.y_input.text())
         except ValueError:
             pass
+
 
 def run():
     app = QtWidgets.QApplication(sys.argv)
